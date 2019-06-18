@@ -2,4 +2,10 @@
     <string name="app_name">HawFarm Business</string>
     <string name="email">Email</string>
     <string name="login">login</string>
+
+    <string-array name="user_type">
+        <item>Select User</item>
+        <item>Farmer</item>
+        <item>Hawker</item>
+    </string-array>
 </resources>

@@ -3,7 +3,7 @@ package com.project.hawfarmbusiness;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class forgotPasswordActivity extends AppCompatActivity {
+public class ForgotPasswordActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
