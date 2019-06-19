@@ -1,7 +1,9 @@
 package com.project.hawfarmbusiness;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -10,6 +12,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -17,6 +33,7 @@ public class SignUpActivity extends AppCompatActivity {
     Button createAccount;
     String name, email, password, cPassword, number, pinCode, address, user_type;
     Spinner userSpinner;
+    TextView LinkLogin_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +48,32 @@ public class SignUpActivity extends AppCompatActivity {
         pinCodeField = findViewById(R.id.input_pincode);
         createAccount = findViewById(R.id.btn_signup);
         addressField = findViewById(R.id.input_address);
-
+        LinkLogin_btn = findViewById(R.id.link_login);
+        createAccount = findViewById(R.id.btn_signup);
         userSpinner = findViewById(R.id.user_dropdown);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.user_type, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         userSpinner.setAdapter(adapter);
+
+
+        LinkLogin_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SignUpActivity.this, LogInActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        createAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getValidData()) {
+                    submitData();
+                }
+            }
+        });
 
         userSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -66,9 +103,66 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    private void submitData() {
 
+    private void submitData() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerData.REGISTER_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String data = jsonObject.getString("data");
+                            if (data.equals("ER_DUP_ENTRY")) {
+                                Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content),
+                                        "User Already Exists. Please try to LogIn", Snackbar.LENGTH_INDEFINITE)
+                                        .setAction("Log In", new View.OnClickListener() {
+                                            public void onClick(View v) {
+                                                startActivity(new Intent(SignUpActivity.this, LogInActivity.class));
+                                            }
+                                        }).show();
+                            } else {
+                                Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content),
+                                        "Registration Successful " + data, Snackbar.LENGTH_INDEFINITE)
+                                        .setAction("Log In", new View.OnClickListener() {
+                                            public void onClick(View v) {
+                                                startActivity(new Intent(SignUpActivity.this, LogInActivity.class));
+                                            }
+                                        }).show();
+                            }
+                            Toast.makeText(SignUpActivity.this, jsonObject.getString("data"), Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content),
+                                "Something is Wrong! Please try again.", Snackbar.LENGTH_SHORT).show();
+                        Toast.makeText(SignUpActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                        error.printStackTrace();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("name", name);
+                params.put("email", email);
+                params.put("phone", number);
+                params.put("password", password);
+                //TODO: Change the user type
+                params.put("user_type", user_type);
+                params.put("address", address);
+                params.put("pincode", pinCode);
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(SignUpActivity.this);
+        requestQueue.add(stringRequest);
     }
+
 
     private boolean getValidData() {
         boolean valid = false;
