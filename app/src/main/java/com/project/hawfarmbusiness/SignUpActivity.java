@@ -56,7 +56,6 @@ public class SignUpActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         userSpinner.setAdapter(adapter);
 
-
         LinkLogin_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,7 +101,6 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void submitData() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerData.REGISTER_URL,

@@ -1,6 +1,8 @@
 package com.project.hawfarmbusiness;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,8 +34,9 @@ public class LogInActivity extends AppCompatActivity {
     TextView linkSignUp;
     TextView linkForgotPassword;
     Button LogIn;
-    EditText email_field,password_field;
-    String email,pass;
+    EditText email_field, password_field;
+    String email, pass;
+    SharedPreferences mPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,9 @@ public class LogInActivity extends AppCompatActivity {
         email_field = findViewById(R.id.input_email);
         password_field = findViewById(R.id.input_password);
 
+        // shared preferences
+        mPreferences = getSharedPreferences("login", Context.MODE_PRIVATE);
+        checkSharedPreferences();
 
         linkForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,14 +70,15 @@ public class LogInActivity extends AppCompatActivity {
         LogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getValidData()) {
-                    startActivity(new Intent(LogInActivity.this, HomeActivity.class));
+                if (getValidData()) {
                     userLogin();
                 }
             }
         });
 
-    }    private boolean getValidData() {
+    }
+
+    private boolean getValidData() {
         boolean valid = false;
         email = email_field.getText().toString().trim();
         pass = password_field.getText().toString().trim();
@@ -78,7 +86,7 @@ public class LogInActivity extends AppCompatActivity {
 
         if (email.isEmpty()) {
             email_field.setError("Enter E-mail");
-            password_field.requestFocus();
+            email_field.requestFocus();
         } else if (pass.isEmpty()) {
             password_field.setError("Enter Password");
             password_field.requestFocus();
@@ -100,8 +108,10 @@ public class LogInActivity extends AppCompatActivity {
                             if (success.equals("true")) {
                                 String data = jsonObject.getString("data");
                                 Log.d(TAG, "data: " + data);
-                                Intent intent;
-                                intent = new Intent(LogInActivity.this, HomeActivity.class);
+                                JSONArray jsonArray = new JSONArray(data);
+                                JSONObject userJsonData = new JSONObject(jsonArray.getString(0));
+                                savePreferences(data);
+                                Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
                                 intent.putExtra("userData", data);
                                 startActivity(intent);
                                 finish();
@@ -117,7 +127,10 @@ public class LogInActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content),
+                        "Something is Wrong! Please try again.", Snackbar.LENGTH_SHORT).show();
                 Toast.makeText(LogInActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         }) {
             @Override
@@ -133,6 +146,21 @@ public class LogInActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
+    private void savePreferences(String data) {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putString("userDataStringKey", data);
+        editor.apply();
+    }
 
+    private void checkSharedPreferences() {
+
+        if (mPreferences.contains("userDataStringKey")) {
+            String userDataString = mPreferences.getString("userDataStringKey", "");
+            Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
+            intent.putExtra("userData", userDataString);
+            startActivity(intent);
+            finish();
+        }
+    }
 
 }

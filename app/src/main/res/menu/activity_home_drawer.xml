@@ -5,17 +5,22 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
+            android:id="@+id/nav_add_stock"
+            android:icon="@drawable/ic_stock_add"
             android:title="Add Stock" />
+
+        <item
+            android:id="@+id/nav_my_stock"
+            android:icon="@drawable/ic_format_list_bulleted"
+            android:title="Current Stock" />
     </group>
 
     <item android:title="Communicate">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/menu_share" />
+                android:id="@+id/nav_contact_us"
+                android:icon="@drawable/ic_chat_bubble_outline"
+                android:title="Contact Us" />
         </menu>
     </item>
 
