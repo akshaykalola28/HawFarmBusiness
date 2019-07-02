@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/tools">
-
+    android:layout_height="match_parent">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -24,8 +22,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:text="Veg Name"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textStyle="bold" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <TextView
                 android:id="@+id/veg_date"
@@ -33,15 +30,14 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:text="Date"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textStyle="bold" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             <View
                 android:id="@+id/horizontal_line"
                 android:layout_width="wrap_content"
                 android:layout_height="2dp"
                 android:layout_below="@+id/veg_name"
-                android:background="#000000" />
+                android:background="#c0c0c0" />
 
             <TextView
                 android:id="@+id/total_Stock_card"
@@ -49,16 +45,15 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/horizontal_line"
                 android:text="Total Stock"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textStyle="bold" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
             <TextView
                 android:id="@+id/Current_stock_card"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/total_Stock_card"
-                android:text="53kg"
                 android:layout_marginBottom="5dp"
+                android:text="53kg"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <TextView
@@ -68,8 +63,7 @@
                 android:layout_below="@id/horizontal_line"
                 android:layout_alignParentRight="true"
                 android:text="Current Stock"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textStyle="bold" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
             <TextView
                 android:id="@+id/total_kg"
@@ -87,8 +81,7 @@
                 android:layout_below="@+id/total_kg"
                 android:layout_marginTop="2dp"
                 android:text="Stock Id"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textStyle="bold" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
             <TextView
                 android:id="@+id/text_stock_id"
