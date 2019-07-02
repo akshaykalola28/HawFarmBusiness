@@ -13,4 +13,7 @@ public class ServerData {
 
     public static final String ADD_STOCK_URL = CURRENT_HOST + "stock/add";
     public static final String PRODUCT_URL = CURRENT_HOST + "product.json";
+
+    public static final String ALL_STOCK_URL = CURRENT_HOST + "stock/all/";
+
 }
