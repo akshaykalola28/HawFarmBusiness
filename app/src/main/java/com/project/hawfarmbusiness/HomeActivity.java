@@ -1,5 +1,6 @@
 package com.project.hawfarmbusiness;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,6 +27,8 @@ public class HomeActivity extends AppCompatActivity
     TextView displayName, displayEmail;
     String userDataString;
     JSONObject userDataJson;
+    ProgressDialog mDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,11 +110,14 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+
         int id = item.getItemId();
 
         if (id == R.id.nav_add_stock) {
+
             getFragmentManager().beginTransaction().replace(R.id.home_fragment, new AddStockFragment()).commit();
         } if (id == R.id.nav_my_stock) {
+
             getFragmentManager().beginTransaction().replace(R.id.home_fragment, new CurrentStockFragment()).commit();
         }
 

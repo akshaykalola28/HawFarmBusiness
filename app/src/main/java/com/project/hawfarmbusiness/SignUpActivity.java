@@ -1,5 +1,6 @@
 package com.project.hawfarmbusiness;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ public class SignUpActivity extends AppCompatActivity {
     String name, email, password, cPassword, number, pinCode, address, user_type;
     Spinner userSpinner;
     TextView LinkLogin_btn;
+    ProgressDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,6 @@ public class SignUpActivity extends AppCompatActivity {
         createAccount = findViewById(R.id.btn_signup);
         addressField = findViewById(R.id.input_address);
         LinkLogin_btn = findViewById(R.id.link_login);
-        createAccount = findViewById(R.id.btn_signup);
         userSpinner = findViewById(R.id.user_dropdown);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.user_type, android.R.layout.simple_spinner_item);
@@ -69,6 +70,9 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (getValidData()) {
+                    mDialog = new ProgressDialog(SignUpActivity.this);
+                    mDialog.setMessage("Creating Account..");
+                    mDialog.show();
                     submitData();
                 }
             }
@@ -91,15 +95,6 @@ public class SignUpActivity extends AppCompatActivity {
 
             }
         });
-
-        createAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (getValidData()) {
-                    submitData();
-                }
-            }
-        });
     }
 
     private void submitData() {
@@ -111,6 +106,7 @@ public class SignUpActivity extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject(response);
                             String data = jsonObject.getString("data");
                             if (data.equals("ER_DUP_ENTRY")) {
+                                mDialog.dismiss();
                                 Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content),
                                         "User Already Exists. Please try to LogIn", Snackbar.LENGTH_INDEFINITE)
                                         .setAction("Log In", new View.OnClickListener() {
@@ -119,6 +115,7 @@ public class SignUpActivity extends AppCompatActivity {
                                             }
                                         }).show();
                             } else {
+                                mDialog.dismiss();
                                 Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content),
                                         "Registration Successful " + data, Snackbar.LENGTH_INDEFINITE)
                                         .setAction("Log In", new View.OnClickListener() {
@@ -129,6 +126,7 @@ public class SignUpActivity extends AppCompatActivity {
                             }
                             Toast.makeText(SignUpActivity.this, jsonObject.getString("data"), Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
+                            mDialog.dismiss();
                             e.printStackTrace();
                         }
                     }
