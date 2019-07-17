@@ -86,7 +86,8 @@ public class HomeActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        } if (id == R.id.action_logout) {
+        }
+        if (id == R.id.action_logout) {
             logOut();
         }
 
@@ -110,9 +111,10 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_add_stock) {
-            getFragmentManager().beginTransaction().replace(R.id.home_fragment, new AddStockFragment()).commit();
-        } if (id == R.id.nav_my_stock) {
-            getFragmentManager().beginTransaction().replace(R.id.home_fragment, new CurrentStockFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new AddStockFragment()).commit();
+        }
+        if (id == R.id.nav_my_stock) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new CurrentStockFragment()).commit();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -120,7 +122,7 @@ public class HomeActivity extends AppCompatActivity
         return true;
     }
 
-    public JSONObject getUser(){
+    public JSONObject getUser() {
         return userDataJson;
     }
 }
