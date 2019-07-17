@@ -1,5 +1,6 @@
 package com.project.hawfarmbusiness;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,6 +27,8 @@ public class HomeActivity extends AppCompatActivity
     TextView displayName, displayEmail;
     String userDataString;
     JSONObject userDataJson;
+    ProgressDialog mDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +89,7 @@ public class HomeActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        }
-        if (id == R.id.action_logout) {
+        } if (id == R.id.action_logout) {
             logOut();
         }
 
@@ -108,6 +110,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+
         int id = item.getItemId();
 
         if (id == R.id.nav_add_stock) {
@@ -122,7 +125,7 @@ public class HomeActivity extends AppCompatActivity
         return true;
     }
 
-    public JSONObject getUser() {
+    public JSONObject getUser(){
         return userDataJson;
     }
 }

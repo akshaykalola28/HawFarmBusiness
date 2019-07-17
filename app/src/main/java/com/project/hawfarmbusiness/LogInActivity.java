@@ -1,5 +1,6 @@
 package com.project.hawfarmbusiness;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -37,6 +38,7 @@ public class LogInActivity extends AppCompatActivity {
     EditText email_field, password_field;
     String email, pass;
     SharedPreferences mPreferences;
+    ProgressDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class LogInActivity extends AppCompatActivity {
         LogIn = findViewById(R.id.btn_login);
         email_field = findViewById(R.id.input_email);
         password_field = findViewById(R.id.input_password);
+
 
         // shared preferences
         mPreferences = getSharedPreferences("login", Context.MODE_PRIVATE);
@@ -71,6 +74,9 @@ public class LogInActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (getValidData()) {
+                    mDialog = new ProgressDialog(LogInActivity.this);
+                    mDialog.setMessage("Please Wait..");
+                    mDialog.show();
                     userLogin();
                 }
             }
@@ -111,22 +117,26 @@ public class LogInActivity extends AppCompatActivity {
                                 JSONArray jsonArray = new JSONArray(data);
                                 JSONObject userJsonData = new JSONObject(jsonArray.getString(0));
                                 savePreferences(data);
+                                mDialog.dismiss();
                                 Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
                                 intent.putExtra("userData", data);
                                 startActivity(intent);
                                 finish();
                             } else {
                                 String data = jsonObject.getString("data");
+                                mDialog.dismiss();
                                 Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content),
                                         data, Snackbar.LENGTH_INDEFINITE).show();
                             }
                         } catch (JSONException e) {
+                            mDialog.dismiss();
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                mDialog.dismiss();
                 Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content),
                         "Something is Wrong! Please try again.", Snackbar.LENGTH_SHORT).show();
                 Toast.makeText(LogInActivity.this, error.toString(), Toast.LENGTH_SHORT).show();

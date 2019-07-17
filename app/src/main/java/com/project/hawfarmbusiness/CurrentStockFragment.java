@@ -16,6 +16,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.project.hawfarmbusiness.adapter.CurrentStockAdapter;
@@ -33,10 +34,21 @@ public class CurrentStockFragment extends Fragment {
     CurrentStockAdapter mAdapter;
     List<JSONObject> currentStockList;
 
+    JSONObject userDataJson;
+    String userId;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         mainView = inflater.inflate(R.layout.current_stock_fragment, container, false);
+
+        userDataJson = ((HomeActivity) getActivity()).getUser();
+        try {
+            userId = userDataJson.getString("user_id");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         RecyclerView recyclerView = mainView.findViewById(R.id.current_stock_recycleview);
         recyclerView.setHasFixedSize(true);
@@ -59,6 +71,7 @@ public class CurrentStockFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         try {
+
                             JSONObject allResponse = new JSONObject(response);
                             if (allResponse.getString("responseSuccess").equals("true")) {
                                 JSONObject data = allResponse.getJSONArray("data").getJSONObject(0);
