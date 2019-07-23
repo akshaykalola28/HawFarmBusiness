@@ -7,10 +7,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,7 +85,17 @@ public class LogInActivity extends AppCompatActivity {
                 }
             }
         });
+        setAnimation();
 
+    }
+    private void setAnimation() {
+        CardView loginCardView = findViewById(R.id.login_cardview);
+        Animation fromBottom = AnimationUtils.loadAnimation(this, R.anim.frombottom);
+        loginCardView.setAnimation(fromBottom);
+
+        ImageView logoImageView=findViewById(R.id.company_logo);
+        Animation fromtop=AnimationUtils.loadAnimation(this,R.anim.fromtop);
+        logoImageView.setAnimation(fromtop);
     }
 
     private boolean getValidData() {
@@ -151,10 +165,11 @@ public class LogInActivity extends AppCompatActivity {
                 return params;
             }
         };
-
         RequestQueue requestQueue = Volley.newRequestQueue(LogInActivity.this);
         requestQueue.add(stringRequest);
     }
+
+
 
     private void savePreferences(String data) {
         SharedPreferences.Editor editor = mPreferences.edit();
