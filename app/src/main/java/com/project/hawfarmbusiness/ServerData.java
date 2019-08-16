@@ -3,7 +3,7 @@ package com.project.hawfarmbusiness;
 public class ServerData {
 
     private static final String LOCAL_IP = "http://192.168.47.1:8000/";
-    private static final String SERVER_HOSTNAME = "http://hawfarm.openode.io/";
+    private static final String SERVER_HOSTNAME = "https://us-central1-hawfarm-2019.cloudfunctions.net/api/";
 
     //Change this only for choose localhost or server host
     public static final String CURRENT_HOST = SERVER_HOSTNAME;

@@ -188,7 +188,7 @@ public class AddStockFragment extends Fragment {
             gram1Field.setError("Enter Grams");
             gram1Field.requestFocus();
         } else if (price1String.isEmpty()) {
-            price1Field.setError("Entar Price");
+            price1Field.setError("Enter Price");
             price1Field.requestFocus();
         } else {
             valid = true;
