@@ -128,8 +128,12 @@ public class LogInActivity extends AppCompatActivity {
                             if (success.equals("true")) {
                                 String data = jsonObject.getString("data");
                                 Log.d(TAG, "data: " + data);
-                                JSONArray jsonArray = new JSONArray(data);
-                                JSONObject userJsonData = new JSONObject(jsonArray.getString(0));
+                                JSONArray jsonArray = new JSONArray("data");
+                                int length = jsonObject.length();
+                                for(int i =0;i<length;i++)
+                                {
+                                    JSONObject userJsonData = jsonArray.getJSONObject(i);
+                                }
                                 savePreferences(data);
                                 mDialog.dismiss();
                                 Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
