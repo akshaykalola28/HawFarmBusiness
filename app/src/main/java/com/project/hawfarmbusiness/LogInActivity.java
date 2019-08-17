@@ -128,8 +128,8 @@ public class LogInActivity extends AppCompatActivity {
                             if (success.equals("true")) {
                                 String data = jsonObject.getString("data");
                                 Log.d(TAG, "data: " + data);
-                                String auth = jsonObject.getString("auth");
-                                Log.d(TAG, "auth: " + auth);
+//                                String auth = jsonObject.getString("auth");
+//                                Log.d(TAG, "auth: " + auth);
 //                                JSONArray jsonArray = new JSONArray("data");
 //                                int length = jsonObject.length();
 //                                for(int i =0;i<length;i++)
