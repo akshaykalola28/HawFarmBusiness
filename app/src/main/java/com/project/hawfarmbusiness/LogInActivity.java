@@ -128,12 +128,14 @@ public class LogInActivity extends AppCompatActivity {
                             if (success.equals("true")) {
                                 String data = jsonObject.getString("data");
                                 Log.d(TAG, "data: " + data);
-                                JSONArray jsonArray = new JSONArray("data");
-                                int length = jsonObject.length();
-                                for(int i =0;i<length;i++)
-                                {
-                                    JSONObject userJsonData = jsonArray.getJSONObject(i);
-                                }
+                                String auth = jsonObject.getString("auth");
+                                Log.d(TAG, "auth: " + auth);
+//                                JSONArray jsonArray = new JSONArray("data");
+//                                int length = jsonObject.length();
+//                                for(int i =0;i<length;i++)
+//                                {
+//                                    JSONObject userJsonData = jsonArray.getJSONObject(i);
+//                                }
                                 savePreferences(data);
                                 mDialog.dismiss();
                                 Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
