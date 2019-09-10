@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,8 +51,7 @@ public class HomeActivity extends AppCompatActivity
         userDataString = getIntent().getStringExtra("userData");
         try {
             Log.d("USERDATA", "User Data String: " + userDataString);
-            JSONArray userDataJsonArray = new JSONArray(userDataString);
-            userDataJson = new JSONObject(userDataJsonArray.getString(0).trim());
+            userDataJson = new JSONObject(userDataString.trim());
 
             displayName.setText(userDataJson.getString("name"));
             displayEmail.setText(userDataJson.getString("email"));

@@ -26,7 +26,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -54,7 +53,6 @@ public class LogInActivity extends AppCompatActivity {
         LogIn = findViewById(R.id.btn_login);
         email_field = findViewById(R.id.input_email);
         password_field = findViewById(R.id.input_password);
-
 
         // shared preferences
         mPreferences = getSharedPreferences("login", Context.MODE_PRIVATE);
@@ -128,10 +126,9 @@ public class LogInActivity extends AppCompatActivity {
                             if (success.equals("true")) {
                                 String data = jsonObject.getString("data");
                                 Log.d(TAG, "data: " + data);
-                                JSONArray jsonArray = new JSONArray(data);
-                                JSONObject userJsonData = new JSONObject(jsonArray.getString(0));
                                 savePreferences(data);
                                 mDialog.dismiss();
+
                                 Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
                                 intent.putExtra("userData", data);
                                 startActivity(intent);
@@ -168,8 +165,6 @@ public class LogInActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(LogInActivity.this);
         requestQueue.add(stringRequest);
     }
-
-
 
     private void savePreferences(String data) {
         SharedPreferences.Editor editor = mPreferences.edit();
