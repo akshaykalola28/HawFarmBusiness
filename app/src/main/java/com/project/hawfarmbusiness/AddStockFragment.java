@@ -37,11 +37,11 @@ public class AddStockFragment extends Fragment {
 
     View mainView;
 
-    EditText vegNameField, totalStockField, gram1Field, price1Field;
+    EditText vegNameField, totalStockField, gram1Field, price1Field,descriptionField;
     Button submitButton;
     AutoCompleteTextView vegNameAutoComplete;
 
-    String vegName, totalStockString, gram1String, price1String;
+    String vegName, totalStockString, gram1String, price1String,description;
     JSONObject userDataJson;
     String[] texts;
 
@@ -61,6 +61,7 @@ public class AddStockFragment extends Fragment {
         gram1Field = mainView.findViewById(R.id.input_grams_1);
         price1Field = mainView.findViewById(R.id.input_price_1);
         vegNameAutoComplete = mainView.findViewById(R.id.input_veg_name);
+        descriptionField = mainView.findViewById(R.id.input_Description);
 
         getProductName();
 
@@ -86,6 +87,7 @@ public class AddStockFragment extends Fragment {
             reqParams.put("email", userDataJson.getString("email"));
             reqParams.put("veg_name", vegName);
             reqParams.put("total_stock", totalStockString);
+            reqParams.put("description",description);
 
             JSONArray priceArray = new JSONArray();
             JSONObject priceSingleObject = new JSONObject();
@@ -184,6 +186,7 @@ public class AddStockFragment extends Fragment {
         totalStockString = totalStockField.getText().toString().trim();
         gram1String = gram1Field.getText().toString().trim();
         price1String = price1Field.getText().toString().trim();
+        description = descriptionField.getText().toString().trim();
 
         Log.d("value of", Arrays.toString(texts));
 
@@ -201,10 +204,16 @@ public class AddStockFragment extends Fragment {
         } else if (totalStockString.isEmpty()) {
             totalStockField.setError("Enter Total Stock");
             totalStockField.requestFocus();
-        } else if (gram1String.isEmpty()) {
+        }
+        else if (description.isEmpty())
+        {
+            descriptionField.setError("Enter Description");
+            descriptionField.requestFocus();
+        }
+        else if (gram1String.isEmpty()) {
             gram1Field.setError("Enter Grams");
             gram1Field.requestFocus();
-        } else if (price1String.isEmpty()) {
+        }else if (price1String.isEmpty()) {
             price1Field.setError("Enter Price");
             price1Field.requestFocus();
         } else {
