@@ -24,27 +24,13 @@
             android:layout_height="wrap_content">
 
             <AutoCompleteTextView
-                android:id="@+id/auto_veg_name"
+                android:id="@+id/input_veg_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:completionThreshold="1"
                 android:hint="Veg. Name" />
         </android.support.design.widget.TextInputLayout>
 
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
-
-            <EditText
-                android:id="@+id/input_veg_name"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Veg. Name"
-                android:inputType="textEmailAddress" />
-        </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"

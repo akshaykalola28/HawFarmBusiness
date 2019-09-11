@@ -28,7 +28,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class AddStockFragment extends Fragment {
 
@@ -44,6 +47,8 @@ public class AddStockFragment extends Fragment {
 
     ProgressDialog mDialog;
 
+    List<String> responseList;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,7 +60,7 @@ public class AddStockFragment extends Fragment {
         totalStockField = mainView.findViewById(R.id.input_total_stock);
         gram1Field = mainView.findViewById(R.id.input_grams_1);
         price1Field = mainView.findViewById(R.id.input_price_1);
-        vegNameAutoComplete = mainView.findViewById(R.id.auto_veg_name);
+        vegNameAutoComplete = mainView.findViewById(R.id.input_veg_name);
 
         getProductName();
 
@@ -90,47 +95,44 @@ public class AddStockFragment extends Fragment {
 
             reqParams.put("price", priceArray);
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, ServerData.ADD_STOCK_URL, reqParams,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                String success = response.getString("responseSuccess");
-                                if (success.equals("true")) {
-                                    mDialog.dismiss();
-                                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-                                    alertDialogBuilder.setTitle("Add Stock").setMessage("Stock Added Successfully")
-                                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    //TODO: set on click work
-                                                }
-                                            }).setNegativeButton("Add new", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            getFragmentManager().beginTransaction().replace(R.id.home_fragment, new AddStockFragment()).commit();
-                                        }
-                                    }).show();
-                                } else {
-                                    mDialog.dismiss();
-                                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-                                    alertDialogBuilder.setTitle("Add Stock").setMessage("Failed to add Stock")
-                                            .setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    //TODO: set on click work
-                                                }
-                                            }).show();
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, ServerData.ADD_STOCK_URL, reqParams, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        Log.d("DATA", response.toString());
+                        String success = response.getString("responseSuccess");
+                        if (success.equals("true")) {
+                            mDialog.dismiss();
+                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                            alertDialogBuilder.setTitle("Add Stock").setMessage("Stock Added Successfully").setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //TODO: set on click work
                                 }
-                            } catch (JSONException e) {
-                                mDialog.dismiss();
-                                e.printStackTrace();
-                            }
+                            }).setNegativeButton("Add new", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getFragmentManager().beginTransaction().replace(R.id.home_fragment, new AddStockFragment()).commit();
+                                }
+                            }).show();
+                        } else {
+                            mDialog.dismiss();
+                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                            alertDialogBuilder.setTitle("Add Stock").setMessage("Failed to add Stock").setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //TODO: set on click work
+                                }
+                            }).show();
                         }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
+                    } catch (JSONException e) {
+                        mDialog.dismiss();
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
 
-                        }
-                    });
+                }
+            });
 
             RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
             requestQueue.add(jsonObjectRequest);
@@ -141,24 +143,30 @@ public class AddStockFragment extends Fragment {
     }
 
     private void getProductName() {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, ServerData.PRODUCT_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("RESPONSE", response);
-                        //TODO: Split the array properly
-                        texts = response.split(",");
-                        Log.d("ARRAY", Arrays.toString(texts));
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, ServerData.PRODUCT_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("RESPONSE", response);
 
-                        try {
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(),
-                                    android.R.layout.simple_dropdown_item_1line, texts);
-                            vegNameAutoComplete.setAdapter(adapter);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                try {
+                    JSONArray productArray = new JSONArray(response);
+                    texts = new String[productArray.length()];
+                    for (int i = 0; i < productArray.length(); i++) {
+                        texts[i] = productArray.getString(i);
                     }
-                }, new Response.ErrorListener() {
+                    Log.d("ARRAY", Arrays.toString(texts));
+
+                    try {
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_dropdown_item_1line, texts);
+                        vegNameAutoComplete.setAdapter(adapter);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
@@ -171,13 +179,23 @@ public class AddStockFragment extends Fragment {
 
     private boolean getValidData() {
         boolean valid = false;
-
+        boolean vegIsValid = false;
         vegName = vegNameField.getText().toString().trim();
         totalStockString = totalStockField.getText().toString().trim();
         gram1String = gram1Field.getText().toString().trim();
         price1String = price1Field.getText().toString().trim();
 
-        if (vegName.isEmpty()) {
+        Log.d("value of", Arrays.toString(texts));
+
+        if (!vegName.isEmpty()) {
+            for (int i = 0; i < texts.length; i++) {
+                if (vegName.equals(texts[i])) {
+                    vegIsValid = true;
+                    break;
+                }
+            }
+        }
+        if (!vegIsValid){
             vegNameField.setError("Enter Vegetable Name");
             vegNameField.requestFocus();
         } else if (totalStockString.isEmpty()) {
