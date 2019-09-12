@@ -45,10 +45,11 @@ public class CurrentStockFragment extends Fragment {
 
         userDataJson = ((HomeActivity) getActivity()).getUser();
         try {
-            userId = userDataJson.getString("user_id");
+            userId = userDataJson.getString("email");
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        Log.d("userid",userId);
 
         RecyclerView recyclerView = mainView.findViewById(R.id.current_stock_recycleview);
         recyclerView.setHasFixedSize(true);
@@ -66,7 +67,7 @@ public class CurrentStockFragment extends Fragment {
 
     private void fetchCurrentAllStock() {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerData.ALL_STOCK_URL + "105",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ServerData.ALL_STOCK_URL + userId,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
