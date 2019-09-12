@@ -26,7 +26,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -166,8 +165,6 @@ public class LogInActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(LogInActivity.this);
         requestQueue.add(stringRequest);
     }
-
-
 
     private void savePreferences(String data) {
         SharedPreferences.Editor editor = mPreferences.edit();

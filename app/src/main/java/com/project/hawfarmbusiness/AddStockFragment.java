@@ -28,26 +28,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class AddStockFragment extends Fragment {
 
     View mainView;
 
-    EditText vegNameField, totalStockField, gram1Field, price1Field,descriptionField;
+    EditText vegNameField, totalStockField, gram1Field, price1Field, descriptionField;
     Button submitButton;
     AutoCompleteTextView vegNameAutoComplete;
 
-    String vegName, totalStockString, gram1String, price1String,description;
+    String vegName, totalStockString, gram1String, price1String, description;
     JSONObject userDataJson;
     String[] texts;
 
     ProgressDialog mDialog;
-
-    List<String> responseList;
 
     @Nullable
     @Override
@@ -56,7 +51,6 @@ public class AddStockFragment extends Fragment {
 
         userDataJson = ((HomeActivity) getActivity()).getUser();
 
-        vegNameField = mainView.findViewById(R.id.input_veg_name);
         totalStockField = mainView.findViewById(R.id.input_total_stock);
         gram1Field = mainView.findViewById(R.id.input_grams_1);
         price1Field = mainView.findViewById(R.id.input_price_1);
@@ -87,7 +81,7 @@ public class AddStockFragment extends Fragment {
             reqParams.put("email", userDataJson.getString("email"));
             reqParams.put("veg_name", vegName);
             reqParams.put("total_stock", totalStockString);
-            reqParams.put("description",description);
+            reqParams.put("description", description);
 
             JSONArray priceArray = new JSONArray();
             JSONObject priceSingleObject = new JSONObject();
@@ -182,7 +176,7 @@ public class AddStockFragment extends Fragment {
     private boolean getValidData() {
         boolean valid = false;
         boolean vegIsValid = false;
-        vegName = vegNameField.getText().toString().trim();
+        vegName = vegNameAutoComplete.getText().toString().trim();
         totalStockString = totalStockField.getText().toString().trim();
         gram1String = gram1Field.getText().toString().trim();
         price1String = price1Field.getText().toString().trim();
@@ -198,22 +192,19 @@ public class AddStockFragment extends Fragment {
                 }
             }
         }
-        if (!vegIsValid){
-            vegNameField.setError("Enter Vegetable Name");
-            vegNameField.requestFocus();
+        if (!vegIsValid) {
+            vegNameAutoComplete.setError("Enter Vegetable Name");
+            vegNameAutoComplete.requestFocus();
         } else if (totalStockString.isEmpty()) {
             totalStockField.setError("Enter Total Stock");
             totalStockField.requestFocus();
-        }
-        else if (description.isEmpty())
-        {
+        } else if (description.isEmpty()) {
             descriptionField.setError("Enter Description");
             descriptionField.requestFocus();
-        }
-        else if (gram1String.isEmpty()) {
+        } else if (gram1String.isEmpty()) {
             gram1Field.setError("Enter Grams");
             gram1Field.requestFocus();
-        }else if (price1String.isEmpty()) {
+        } else if (price1String.isEmpty()) {
             price1Field.setError("Enter Price");
             price1Field.requestFocus();
         } else {
