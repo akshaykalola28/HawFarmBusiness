@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LogInActivity"
-    android:background="@drawable/login_background">
+    android:background="@drawable/login_background"
+    android:screenOrientation="portrait">
 
     <ImageView
         android:id="@+id/company_logo"
@@ -24,7 +25,6 @@
         android:layout_marginStart="100dp"
         app:cardCornerRadius="5dp"
         app:contentPadding="10dp"
-        android:layout_below="@+id/company_logo"
         android:stateListAnimator="@anim/frombottom"
         android:foreground="?attr/selectableItemBackground"
         android:clickable="true"
@@ -32,7 +32,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <!-- Email Label -->
         <android.support.design.widget.TextInputLayout
