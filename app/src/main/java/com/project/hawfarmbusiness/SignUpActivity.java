@@ -3,11 +3,14 @@ package com.project.hawfarmbusiness;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -100,8 +103,15 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
         setAnimation();
+        changeStatusBarColor();
     }
-
+    private void changeStatusBarColor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+        }
+    }
     private void setAnimation() {
         CardView SignuoCardview = findViewById(R.id.sign_up_card_view);
         Animation fromBottom = AnimationUtils.loadAnimation(this, R.anim.frombottom);
