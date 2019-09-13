@@ -3,7 +3,11 @@ package com.project.hawfarmbusiness;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +19,8 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -28,7 +34,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URI;
 import java.util.Arrays;
+
+import static android.app.Activity.RESULT_OK;
 
 public class AddStockFragment extends Fragment {
 
@@ -37,10 +46,12 @@ public class AddStockFragment extends Fragment {
     EditText vegNameField, totalStockField, gram1Field, price1Field, descriptionField;
     Button submitButton;
     AutoCompleteTextView vegNameAutoComplete;
+    ImageView imagePick;
 
     String vegName, totalStockString, gram1String, price1String, description;
     JSONObject userDataJson;
     String[] texts;
+    Uri fileUri;
 
     ProgressDialog mDialog;
 
@@ -57,7 +68,19 @@ public class AddStockFragment extends Fragment {
         vegNameAutoComplete = mainView.findViewById(R.id.input_veg_name);
         descriptionField = mainView.findViewById(R.id.input_Description);
 
+        imagePick = mainView.findViewById(R.id.input_image_submit);
+
         getProductName();
+
+        imagePick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+
+                startActivityForResult(intent, 100);
+            }
+        });
 
         submitButton = mainView.findViewById(R.id.input_stock_submit);
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +96,29 @@ public class AddStockFragment extends Fragment {
         });
 
         return mainView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        try {
+
+            // When an Image is picked
+            if (requestCode == 100 && resultCode == RESULT_OK) {
+                if (data != null && data.getExtras() != null) {
+                    Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
+                    imagePick.setImageBitmap(imageBitmap);
+                }
+            } else {
+                Toast.makeText(getActivity(), "You haven't picked up image" + resultCode, Toast.LENGTH_LONG).show();
+
+            }
+        } catch (Exception e) {
+
+            Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG)
+                    .show();
+        }
+
     }
 
     private void addStock() {
