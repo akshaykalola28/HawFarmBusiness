@@ -6,13 +6,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".AddStockFragment">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="20dp"
             android:orientation="vertical">
 
@@ -31,6 +27,8 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/image"
+
+                app:civ_border_width="4dp"
                 app:civ_shadow="true"
                 app:civ_shadow_color="#03A9F4"
                 app:civ_shadow_radius="10" />
@@ -204,6 +202,6 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="25dp"
                 android:text="Submit" />
+
         </LinearLayout>
-    </ScrollView>
 </ScrollView>

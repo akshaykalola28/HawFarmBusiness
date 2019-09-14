@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 
 import static android.app.Activity.RESULT_OK;
@@ -51,6 +53,7 @@ public class AddStockFragment extends Fragment {
     JSONObject userDataJson;
     String[] texts;
     Uri fileUri;
+    String baseImg;
 
     ProgressDialog mDialog;
 
@@ -76,7 +79,6 @@ public class AddStockFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-
                 startActivityForResult(intent, 100);
             }
         });
@@ -101,21 +103,24 @@ public class AddStockFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
         try {
-
             // When an Image is picked
             if (requestCode == 100 && resultCode == RESULT_OK) {
                 if (data != null && data.getExtras() != null) {
                     Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
                     imagePick.setImageBitmap(imageBitmap);
+
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] imageBytes = baos.toByteArray();
+                    baseImg = Base64.encodeToString(imageBytes, Base64.DEFAULT);
                 }
             } else {
-                Toast.makeText(getActivity(), "You haven't picked up image" + resultCode, Toast.LENGTH_LONG).show();
+                //TODO: remove resultCode on release
+                Toast.makeText(getActivity(), "You haven't picked up Image: " + resultCode, Toast.LENGTH_LONG).show();
 
             }
         } catch (Exception e) {
-
-            Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG)
-                    .show();
+            Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
         }
 
     }
@@ -124,10 +129,10 @@ public class AddStockFragment extends Fragment {
         JSONObject reqParams = new JSONObject();
         try {
             reqParams.put("email", userDataJson.getString("email"));
-            reqParams.put("userId", userDataJson.getString("userId"));
             reqParams.put("veg_name", vegName);
             reqParams.put("total_stock", totalStockString);
             reqParams.put("description", description);
+            reqParams.put("base64Str", baseImg);
 
             JSONArray priceArray = new JSONArray();
             JSONObject priceSingleObject = new JSONObject();
@@ -211,7 +216,7 @@ public class AddStockFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
+
             }
         });
 
@@ -227,6 +232,8 @@ public class AddStockFragment extends Fragment {
         gram1String = gram1Field.getText().toString().trim();
         price1String = price1Field.getText().toString().trim();
         description = descriptionField.getText().toString().trim();
+
+        Log.d("value of", Arrays.toString(texts));
 
         if (!vegName.isEmpty()) {
             for (int i = 0; i < texts.length; i++) {
