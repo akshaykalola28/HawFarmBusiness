@@ -5,12 +5,17 @@
     android:layout_height="match_parent"
     tools:context=".SplashScreenActivity">
 
-    <TextView
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Welcome"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textStyle="bold" />
+        android:background="@drawable/login_background">
+
+        <ImageView
+            android:id="@+id/image_logo"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/hawfarm_business" />
+    </RelativeLayout>
 
 </RelativeLayout>

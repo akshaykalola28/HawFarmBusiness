@@ -34,7 +34,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URI;
 import java.util.Arrays;
 
 import static android.app.Activity.RESULT_OK;
@@ -125,6 +124,7 @@ public class AddStockFragment extends Fragment {
         JSONObject reqParams = new JSONObject();
         try {
             reqParams.put("email", userDataJson.getString("email"));
+            reqParams.put("userId", userDataJson.getString("userId"));
             reqParams.put("veg_name", vegName);
             reqParams.put("total_stock", totalStockString);
             reqParams.put("description", description);
@@ -211,7 +211,7 @@ public class AddStockFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                error.printStackTrace();
             }
         });
 
@@ -227,8 +227,6 @@ public class AddStockFragment extends Fragment {
         gram1String = gram1Field.getText().toString().trim();
         price1String = price1Field.getText().toString().trim();
         description = descriptionField.getText().toString().trim();
-
-        Log.d("value of", Arrays.toString(texts));
 
         if (!vegName.isEmpty()) {
             for (int i = 0; i < texts.length; i++) {
