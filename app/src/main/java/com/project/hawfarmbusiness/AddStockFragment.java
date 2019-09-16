@@ -42,9 +42,10 @@ import static android.app.Activity.RESULT_OK;
 
 public class AddStockFragment extends Fragment {
 
+    private static final String TAG = "AddStockFragment";
     View mainView;
 
-    EditText vegNameField, totalStockField, gram1Field, price1Field, descriptionField;
+    EditText totalStockField, gram1Field, price1Field, descriptionField;
     Button submitButton;
     AutoCompleteTextView vegNameAutoComplete;
     ImageView imagePick;
@@ -112,12 +113,11 @@ public class AddStockFragment extends Fragment {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     byte[] imageBytes = baos.toByteArray();
-                    baseImg = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+                    baseImg = Base64.encodeToString(imageBytes, Base64.URL_SAFE); //Or use BAse64.DEFAULT
                 }
             } else {
                 //TODO: remove resultCode on release
                 Toast.makeText(getActivity(), "You haven't picked up Image: " + resultCode, Toast.LENGTH_LONG).show();
-
             }
         } catch (Exception e) {
             Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
@@ -129,6 +129,7 @@ public class AddStockFragment extends Fragment {
         JSONObject reqParams = new JSONObject();
         try {
             reqParams.put("email", userDataJson.getString("email"));
+            reqParams.put("userId", userDataJson.getString("userId"));
             reqParams.put("veg_name", vegName);
             reqParams.put("total_stock", totalStockString);
             reqParams.put("description", description);
@@ -141,6 +142,7 @@ public class AddStockFragment extends Fragment {
             priceArray.put(priceSingleObject);
 
             reqParams.put("price", priceArray);
+            Log.d(TAG, "addStock: Request Data: " + reqParams);
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, ServerData.ADD_STOCK_URL, reqParams, new Response.Listener<JSONObject>() {
                 @Override
@@ -177,7 +179,8 @@ public class AddStockFragment extends Fragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
+                    mDialog.dismiss();
+                    error.printStackTrace();
                 }
             });
 
@@ -236,8 +239,8 @@ public class AddStockFragment extends Fragment {
         Log.d("value of", Arrays.toString(texts));
 
         if (!vegName.isEmpty()) {
-            for (int i = 0; i < texts.length; i++) {
-                if (vegName.equals(texts[i])) {
+            for (String text : texts) {
+                if (vegName.equals(text)) {
                     vegIsValid = true;
                     break;
                 }

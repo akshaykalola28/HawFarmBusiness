@@ -2,14 +2,18 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".AddStockFragment">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="20dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -17,8 +21,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="ADD STOCK"
-                android:textSize="30sp"
-                tools:ignore="MissingConstraints" />
+                android:textSize="30sp" />
 
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/input_image_submit"
@@ -27,8 +30,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/image"
-
-                app:civ_border_width="4dp"
+                app:civ_border_width="1dp"
                 app:civ_shadow="true"
                 app:civ_shadow_color="#03A9F4"
                 app:civ_shadow_radius="10" />
@@ -202,6 +204,6 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="25dp"
                 android:text="Submit" />
-
         </LinearLayout>
+    </RelativeLayout>
 </ScrollView>
