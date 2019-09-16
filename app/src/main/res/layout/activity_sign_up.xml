@@ -41,6 +41,18 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/input_profile_submit"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/image"
+                app:civ_border_width="1dp"
+                app:civ_shadow="true"
+                app:civ_shadow_color="#03A9F4"
+                app:civ_shadow_radius="10" />
+
             <!--  Name Label -->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"

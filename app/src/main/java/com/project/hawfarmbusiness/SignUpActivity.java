@@ -1,13 +1,24 @@
 package com.project.hawfarmbusiness;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -32,6 +43,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,11 +51,13 @@ public class SignUpActivity extends AppCompatActivity {
 
     EditText nameField, emailField, passField, cpassField, numberField, pinCodeField, addressField;
     Button createAccount;
-    String name, email, password, cPassword, number, pinCode, address, user_type;
+    String name, email, password, cPassword, number, pinCode, address, user_type ,baseImg;
     Spinner userSpinner;
     TextView LinkLogin_btn;
     ProgressDialog mDialog;
+    ImageView profileField;
 
+    @SuppressLint("WrongThread")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,10 +73,26 @@ public class SignUpActivity extends AppCompatActivity {
         addressField = findViewById(R.id.input_address);
         LinkLogin_btn = findViewById(R.id.link_login);
         userSpinner = findViewById(R.id.user_dropdown);
+        profileField = findViewById(R.id.input_profile_submit);
+
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.user_type, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         userSpinner.setAdapter(adapter);
+
+        profileField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, 100);
+            }
+        });
+
+
+
 
         LinkLogin_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,5 +256,39 @@ public class SignUpActivity extends AppCompatActivity {
             valid = true;
         }
         return valid;
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        try {
+            // When an Image is picked
+            if (requestCode == 100 && resultCode == RESULT_OK && null != data) {
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                Cursor cursor = getContentResolver().query(selectedImage,filePathColumn, null, null, null);
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                String picturePath = cursor.getString(columnIndex);
+                cursor.close();
+                profileField.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                Bitmap bitmapForProfile = BitmapFactory.decodeFile(picturePath);
+
+
+                //Base-64
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmapForProfile.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] imageBytes = baos.toByteArray();
+                baseImg = Base64.encodeToString(imageBytes, Base64.URL_SAFE); //Or use BAse64.DEFAULT
+                Log.d("Start", "onActivityResult: " + baseImg);
+            }
+            else{
+                Toast.makeText(SignUpActivity.this, "You have't pick an image", Toast.LENGTH_LONG).show();
+
+            }
+
+        } catch (Exception e) {
+            Toast.makeText(SignUpActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+        }
+
     }
 }
