@@ -113,16 +113,16 @@ public class AddStockFragment extends Fragment {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     byte[] imageBytes = baos.toByteArray();
-                    baseImg = Base64.encodeToString(imageBytes, Base64.URL_SAFE); //Or use BAse64.DEFAULT
+                    baseImg = Base64.encodeToString(imageBytes, Base64.DEFAULT); //Or use Base64.DEFAULT
                 }
             } else {
                 //TODO: remove resultCode on release
                 Toast.makeText(getActivity(), "You haven't picked up Image: " + resultCode, Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
+            e.printStackTrace();
             Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
         }
-
     }
 
     private void addStock() {
@@ -186,7 +186,6 @@ public class AddStockFragment extends Fragment {
 
             RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
             requestQueue.add(jsonObjectRequest);
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

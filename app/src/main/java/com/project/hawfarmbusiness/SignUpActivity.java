@@ -49,9 +49,10 @@ import java.util.Map;
 
 public class SignUpActivity extends AppCompatActivity {
 
+    private static final String TAG = "SignUpActivity";
     EditText nameField, emailField, passField, cpassField, numberField, pinCodeField, addressField;
     Button createAccount;
-    String name, email, password, cPassword, number, pinCode, address, user_type ,baseImg;
+    String name, email, password, cPassword, number, pinCode, address, user_type, baseImg = "";
     Spinner userSpinner;
     TextView LinkLogin_btn;
     ProgressDialog mDialog;
@@ -76,7 +77,7 @@ public class SignUpActivity extends AppCompatActivity {
         profileField = findViewById(R.id.input_profile_submit);
 
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.user_type, android.R.layout.simple_spinner_item);
@@ -86,12 +87,10 @@ public class SignUpActivity extends AppCompatActivity {
         profileField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, 100);
             }
         });
-
-
 
 
         LinkLogin_btn.setOnClickListener(new View.OnClickListener() {
@@ -108,7 +107,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (getValidData()) {
                     mDialog = new ProgressDialog(SignUpActivity.this);
-                    mDialog.setMessage("Creating Account..");
+                    mDialog.setMessage("Creating Account...");
                     mDialog.show();
                     submitData();
                 }
@@ -135,6 +134,7 @@ public class SignUpActivity extends AppCompatActivity {
         setAnimation();
         changeStatusBarColor();
     }
+
     private void changeStatusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -142,13 +142,14 @@ public class SignUpActivity extends AppCompatActivity {
             window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
         }
     }
+
     private void setAnimation() {
-        CardView SignuoCardview = findViewById(R.id.sign_up_card_view);
+        CardView SignupCardview = findViewById(R.id.sign_up_card_view);
         Animation fromBottom = AnimationUtils.loadAnimation(this, R.anim.frombottom);
-        SignuoCardview.setAnimation(fromBottom);
+        SignupCardview.setAnimation(fromBottom);
 
         ImageView logoImageView = findViewById(R.id.company_logo);
-        Animation fromtop=AnimationUtils.loadAnimation(this,R.anim.fromtop);
+        Animation fromtop = AnimationUtils.loadAnimation(this, R.anim.fromtop);
         logoImageView.setAnimation(fromtop);
     }
 
@@ -172,7 +173,7 @@ public class SignUpActivity extends AppCompatActivity {
                             } else {
                                 mDialog.dismiss();
                                 Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content),
-                                        "Registration Successful " + data, Snackbar.LENGTH_INDEFINITE)
+                                        data, Snackbar.LENGTH_INDEFINITE)
                                         .setAction("Log In", new View.OnClickListener() {
                                             public void onClick(View v) {
                                                 startActivity(new Intent(SignUpActivity.this, LogInActivity.class));
@@ -189,6 +190,8 @@ public class SignUpActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.d(TAG, "onErrorResponse: ");
+                        mDialog.dismiss();
                         Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content),
                                 "Something is Wrong! Please try again.", Snackbar.LENGTH_SHORT).show();
                         Toast.makeText(SignUpActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
@@ -205,6 +208,7 @@ public class SignUpActivity extends AppCompatActivity {
                 params.put("user_type", user_type);
                 params.put("address", address);
                 params.put("pincode", pinCode);
+                params.put("base64Str", baseImg);
                 return params;
             }
         };
@@ -257,6 +261,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
         return valid;
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
@@ -264,8 +269,8 @@ public class SignUpActivity extends AppCompatActivity {
             // When an Image is picked
             if (requestCode == 100 && resultCode == RESULT_OK && null != data) {
                 Uri selectedImage = data.getData();
-                String[] filePathColumn = { MediaStore.Images.Media.DATA };
-                Cursor cursor = getContentResolver().query(selectedImage,filePathColumn, null, null, null);
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
                 cursor.moveToFirst();
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 String picturePath = cursor.getString(columnIndex);
@@ -273,22 +278,16 @@ public class SignUpActivity extends AppCompatActivity {
                 profileField.setImageBitmap(BitmapFactory.decodeFile(picturePath));
                 Bitmap bitmapForProfile = BitmapFactory.decodeFile(picturePath);
 
-
                 //Base-64
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmapForProfile.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] imageBytes = baos.toByteArray();
-                baseImg = Base64.encodeToString(imageBytes, Base64.URL_SAFE); //Or use BAse64.DEFAULT
-                Log.d("Start", "onActivityResult: " + baseImg);
-            }
-            else{
+                baseImg = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+            } else {
                 Toast.makeText(SignUpActivity.this, "You have't pick an image", Toast.LENGTH_LONG).show();
-
             }
-
         } catch (Exception e) {
             Toast.makeText(SignUpActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
         }
-
     }
 }

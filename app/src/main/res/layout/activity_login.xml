@@ -99,7 +99,6 @@
         android:layout_margin="20dp"
         android:gravity="center"
         android:text="No account yet? Create one"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="@color/Dark"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
 </RelativeLayout>

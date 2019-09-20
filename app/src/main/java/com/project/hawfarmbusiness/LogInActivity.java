@@ -87,13 +87,14 @@ public class LogInActivity extends AppCompatActivity {
         setAnimation();
 
     }
+
     private void setAnimation() {
         CardView loginCardView = findViewById(R.id.login_cardview);
         Animation fromBottom = AnimationUtils.loadAnimation(this, R.anim.frombottom);
         loginCardView.setAnimation(fromBottom);
 
-        ImageView logoImageView=findViewById(R.id.company_logo);
-        Animation fromtop=AnimationUtils.loadAnimation(this,R.anim.fromtop);
+        ImageView logoImageView = findViewById(R.id.company_logo);
+        Animation fromtop = AnimationUtils.loadAnimation(this, R.anim.fromtop);
         logoImageView.setAnimation(fromtop);
     }
 

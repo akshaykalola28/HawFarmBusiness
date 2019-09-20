@@ -61,12 +61,10 @@ public class CurrentStockAdapter extends RecyclerView.Adapter<CurrentStockAdapte
         public CurrentStockViewHolder(@NonNull View itemView) {
             super(itemView);
             vegNameField = itemView.findViewById(R.id.veg_name);
-            //  dateField = itemView.findViewById(R.id.veg_date);
+            //dateField = itemView.findViewById(R.id.veg_date);
             totalStockField = itemView.findViewById(R.id.total_stock_field);
             currentStockField = itemView.findViewById(R.id.current_stock_field);
             stockId = itemView.findViewById(R.id.stock_id_field);
-
-
         }
     }
 }
