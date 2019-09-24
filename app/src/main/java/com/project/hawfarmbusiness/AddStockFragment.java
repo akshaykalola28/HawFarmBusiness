@@ -62,6 +62,7 @@ public class AddStockFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.add_stock_fragment, container, false);
+        getActivity().getWindow().setBackgroundDrawableResource(R.drawable.add_stock_background);
 
         userDataJson = ((HomeActivity) getActivity()).getUser();
 

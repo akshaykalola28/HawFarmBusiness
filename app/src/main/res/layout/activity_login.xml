@@ -10,95 +10,95 @@
 
     <ImageView
         android:id="@+id/company_logo"
-        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:src="@drawable/hawfarm_business" /> <!--center horizontal gravity-->
-
+        android:layout_marginTop="40dp"
+        android:padding="30dp"
+        android:src="@drawable/hawfarm_business" />
 
     <android.support.v7.widget.CardView
-        android:id="@+id/login_cardview"
+        android:id="@+id/login_CardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="80dp"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:stateListAnimator="@anim/frombottom"
         app:cardCornerRadius="5dp"
         app:contentPadding="10dp"
-        android:stateListAnimator="@anim/frombottom"
-        android:foreground="?attr/selectableItemBackground"
-        android:clickable="true"
         tools:targetApi="lollipop">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
 
-        <!-- Email Label -->
-        <android.support.design.widget.TextInputLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
-            <EditText
-                android:id="@+id/input_email"
+            <!-- Email Label -->
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/email"
-                android:inputType="textEmailAddress" />
-        </android.support.design.widget.TextInputLayout>
+                android:layout_marginBottom="8dp">
 
-        <!-- Password Label -->
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            app:passwordToggleEnabled="true">
+                <EditText
+                    android:id="@+id/input_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress" />
+            </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/input_password"
+            <!-- Password Label -->
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password"
-                android:inputType="textPassword" />
-        </android.support.design.widget.TextInputLayout>
+                android:layout_marginBottom="8dp"
+                app:passwordToggleEnabled="true">
 
-        <Button
-            android:id="@+id/btn_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/button_style"
-            android:padding="12dp"
-            android:text="login"
-            android:textColor="#ED0A0808" />
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/input_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password"
+                    android:inputType="textPassword" />
+            </android.support.design.widget.TextInputLayout>
 
-        <TextView
-            android:id="@+id/forgot_pass"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:gravity="center"
-            android:text="Forgot Password!"
-            android:textColor="@color/colorPrimary"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+            <TextView
+                android:id="@+id/forgot_pass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:text="Forgot Password"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/colorPrimary" />
 
-    </LinearLayout>
-
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/button_style"
+                android:paddingStart="40dp"
+                android:paddingEnd="40dp"
+                android:text="@string/login" />
+        </LinearLayout>
     </android.support.v7.widget.CardView>
 
-    <TextView
+    <Button
         android:id="@+id/link_signup"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_margin="20dp"
-        android:gravity="center"
-        android:text="No account yet? Create one"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
+        android:layout_marginBottom="70dp"
+        android:background="@drawable/register_button"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
+        android:text="Register" />
 </RelativeLayout>
