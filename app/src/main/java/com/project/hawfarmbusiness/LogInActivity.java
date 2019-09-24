@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -28,6 +29,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,6 +50,7 @@ public class LogInActivity extends AppCompatActivity {
     String email, pass;
     SharedPreferences mPreferences;
     ProgressDialog mDialog;
+    String notificationToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +63,7 @@ public class LogInActivity extends AppCompatActivity {
         email_field = findViewById(R.id.input_email);
         password_field = findViewById(R.id.input_password);
 
-
+        generateFCMToken();
         // shared preferences
         mPreferences = getSharedPreferences("login", Context.MODE_PRIVATE);
         checkSharedPreferences();
@@ -66,6 +72,7 @@ public class LogInActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(LogInActivity.this, ForgotPasswordActivity.class));
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
@@ -73,6 +80,7 @@ public class LogInActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(LogInActivity.this, SignUpActivity.class));
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
@@ -82,6 +90,7 @@ public class LogInActivity extends AppCompatActivity {
                 if (getValidData()) {
                     mDialog = new ProgressDialog(LogInActivity.this);
                     mDialog.setMessage("Please Wait..");
+                    mDialog.setCanceledOnTouchOutside(false);
                     mDialog.show();
                     userLogin();
                 }
@@ -171,6 +180,7 @@ public class LogInActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("email", email);
                 params.put("password", pass);
+                params.put("notificationToken", notificationToken);
                 return params;
             }
         };
@@ -195,4 +205,24 @@ public class LogInActivity extends AppCompatActivity {
         }
     }
 
+    private void generateFCMToken() {
+        // [START retrieve_current_token]
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+                        Log.d("Token", token);
+                        notificationToken = task.getResult().getToken();
+
+                    }
+                });
+        // [END retrieve_current_token]
+    }
 }
