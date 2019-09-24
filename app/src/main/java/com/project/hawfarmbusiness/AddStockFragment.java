@@ -62,7 +62,6 @@ public class AddStockFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.add_stock_fragment, container, false);
-        getActivity().getWindow().setBackgroundDrawableResource(R.drawable.add_stock_background);
 
         userDataJson = ((HomeActivity) getActivity()).getUser();
 
@@ -73,6 +72,7 @@ public class AddStockFragment extends Fragment {
         descriptionField = mainView.findViewById(R.id.input_Description);
 
         imagePick = mainView.findViewById(R.id.input_image_submit);
+        imagePick.bringToFront();
 
         getProductName();
 
