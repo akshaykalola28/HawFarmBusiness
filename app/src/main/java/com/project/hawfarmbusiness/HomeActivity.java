@@ -64,6 +64,8 @@ public class HomeActivity extends AppCompatActivity
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new AllOrderFragment()).commit();
     }
 
     @Override
@@ -93,7 +95,8 @@ public class HomeActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        } if (id == R.id.action_logout) {
+        }
+        if (id == R.id.action_logout) {
             logOut();
         }
 
@@ -117,11 +120,17 @@ public class HomeActivity extends AppCompatActivity
 
         int id = item.getItemId();
 
+        if (id == R.id.nav_home) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new AllOrderFragment()).commit();
+        }
         if (id == R.id.nav_add_stock) {
             getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new AddStockFragment()).commit();
         }
         if (id == R.id.nav_my_stock) {
             getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new CurrentStockFragment()).commit();
+        }
+        if (id == R.id.nav_all_order) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new AllOrderFragment()).commit();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -129,7 +138,7 @@ public class HomeActivity extends AppCompatActivity
         return true;
     }
 
-    public JSONObject getUser(){
+    public JSONObject getUser() {
         return userDataJson;
     }
 }

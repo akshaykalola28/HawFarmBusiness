@@ -16,4 +16,6 @@ public class ServerData {
 
     public static final String ALL_STOCK_URL = CURRENT_HOST + "stock/all/";
 
+    public static final String GET_ORDER_URL = CURRENT_HOST + "order/seller/";
+
 }

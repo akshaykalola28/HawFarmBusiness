@@ -5,6 +5,11 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_format_list_bulleted"
+            android:title="Home" />
+
+        <item
             android:id="@+id/nav_add_stock"
             android:icon="@drawable/ic_stock_add"
             android:title="Add Stock" />
@@ -13,6 +18,11 @@
             android:id="@+id/nav_my_stock"
             android:icon="@drawable/ic_format_list_bulleted"
             android:title="Current Stock" />
+
+        <item
+            android:id="@+id/nav_all_order"
+            android:icon="@drawable/ic_format_list_bulleted"
+            android:title="All Order" />
     </group>
 
     <item android:title="Communicate">
