@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -124,13 +123,13 @@ public class LogInActivity extends AppCompatActivity {
         pass = password_field.getText().toString().trim();
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
-        if (email.isEmpty()|| !email.matches(emailPattern)) {
-            email_field.setError("Enter E-mail");
+        if (email.isEmpty() || !email.matches(emailPattern)) {
+            email_field.setError("Enter Valid E-mail");
             email_field.requestFocus();
-        } else if (pass.isEmpty()|| pass.length()<7) {
-            password_field.setError("Enter Password");
+        } else if (pass.isEmpty() || pass.length() < 7) {
+            password_field.setError("Enter Valid Password");
             password_field.requestFocus();
-        } else{
+        } else {
             valid = true;
         }
         return valid;
@@ -142,23 +141,28 @@ public class LogInActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            Log.d(TAG, "in Responce");
                             JSONObject jsonObject = new JSONObject(response);
                             String success = jsonObject.getString("responseSuccess");
                             if (success.equals("true")) {
-                                String data = jsonObject.getString("data");
+                                JSONObject data = new JSONObject(jsonObject.getString("data"));
                                 Log.d(TAG, "data: " + data);
-                                savePreferences(data);
-                                mDialog.dismiss();
-                                Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
-                                intent.putExtra("userData", data);
-                                startActivity(intent);
-                                finish();
+                                if (data.getString("user_type").equals("farmer") || data.getString("user_type").equals("hawker")) {
+                                    savePreferences(data.toString());
+                                    mDialog.dismiss();
+                                    Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
+                                    intent.putExtra("userData", data.toString());
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    mDialog.dismiss();
+                                    Toast.makeText(LogInActivity.this,
+                                            "You Doesn't have an access for this App.", Toast.LENGTH_SHORT).show();
+                                }
+
                             } else {
                                 String data = jsonObject.getString("data");
                                 mDialog.dismiss();
-                                Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content),
-                                        data, Snackbar.LENGTH_INDEFINITE).show();
+                                Toast.makeText(LogInActivity.this, data, Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             mDialog.dismiss();
@@ -169,9 +173,8 @@ public class LogInActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 mDialog.dismiss();
-                Snackbar.make(getWindow().getDecorView().findViewById(android.R.id.content),
-                        "Something is Wrong! Please try again.", Snackbar.LENGTH_SHORT).show();
-                Toast.makeText(LogInActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LogInActivity.this,
+                        "Something is Wrong! Please try again.", Toast.LENGTH_SHORT).show();
                 error.printStackTrace();
             }
         }) {
