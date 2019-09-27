@@ -6,7 +6,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_format_list_bulleted"
+            android:icon="@drawable/ic_home"
             android:title="Home" />
 
         <item
@@ -21,17 +21,17 @@
 
         <item
             android:id="@+id/nav_all_order"
-            android:icon="@drawable/ic_format_list_bulleted"
+            android:icon="@drawable/ic_order"
             android:title="All Order" />
 
         <item
             android:id="@+id/nav_for_delivery"
-            android:icon="@drawable/ic_format_list_bulleted"
+            android:icon="@drawable/ic_for_delivery"
             android:title="For Delivery" />
 
         <item
             android:id="@+id/nav_pending_order"
-            android:icon="@drawable/ic_format_list_bulleted"
+            android:icon="@drawable/ic_pending_order"
             android:title="Pending Order" />
     </group>
 
