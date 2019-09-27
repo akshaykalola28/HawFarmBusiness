@@ -277,9 +277,7 @@ public class SignUpActivity extends AppCompatActivity {
                 cursor.close();
                 Bitmap bitmapForProfile = BitmapFactory.decodeFile(picturePath);
 
-               // int origWidth = bitmapForProfile.getWidth();
-               // int origHeight = bitmapForProfile.getHeight();
-               // int bitmapSize = (origHeight * origWidth) * 1;
+
                int  bitmapSize = bitmapForProfile.getByteCount();
                 Log.d("Original", "onActivityResult: " + bitmapSize + " | " + length);
                 final int idelSize = 500;//or the width you need
