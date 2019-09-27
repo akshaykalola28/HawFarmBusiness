@@ -44,6 +44,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -224,15 +225,16 @@ public class SignUpActivity extends AppCompatActivity {
         number = numberField.getText().toString();
         pinCode = pinCodeField.getText().toString();
         address = addressField.getText().toString();
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
         if (name.isEmpty()) {
             nameField.setError("Enter Name");
             nameField.requestFocus();
-        } else if (email.isEmpty()) {
-            emailField.setError("Enter Email");
+        } else if (email.isEmpty() || !email.matches(emailPattern)) {
+            emailField.setError("Enter valid Email!");
             emailField.requestFocus();
-        } else if (password.isEmpty()) {
-            passField.setError("Enter Password");
+        } else if (password.isEmpty() || password.length() < 8) {
+            passField.setError("Password must be 8 char long!");
             passField.requestFocus();
         } else if (cPassword.isEmpty() || !password.equals(cPassword)) {
             cpassField.setError("Password are not match");
@@ -249,8 +251,8 @@ public class SignUpActivity extends AppCompatActivity {
         } else if (address.isEmpty()) {
             addressField.setError("Enter Address");
             addressField.requestFocus();
-        } else if (pinCode.isEmpty()) {
-            pinCodeField.setError("Enter Pincode");
+        } else if (pinCode.length() != 6) {
+            pinCodeField.setError("Enter Valid Pincode!");
             pinCodeField.requestFocus();
         } else {
             valid = true;
@@ -270,15 +272,30 @@ public class SignUpActivity extends AppCompatActivity {
                 cursor.moveToFirst();
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 String picturePath = cursor.getString(columnIndex);
+                File file = new File(picturePath);
+                long length = file.length() / 1024; // Size in KB
                 cursor.close();
-                profileField.setImageBitmap(BitmapFactory.decodeFile(picturePath));
                 Bitmap bitmapForProfile = BitmapFactory.decodeFile(picturePath);
 
-                //Base-64
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmapForProfile.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] imageBytes = baos.toByteArray();
-                baseImg = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+               // int origWidth = bitmapForProfile.getWidth();
+               // int origHeight = bitmapForProfile.getHeight();
+               // int bitmapSize = (origHeight * origWidth) * 1;
+               int  bitmapSize = bitmapForProfile.getByteCount();
+                Log.d("Original", "onActivityResult: " + bitmapSize + " | " + length);
+                final int idelSize = 500;//or the width you need
+
+                if (idelSize<length) {
+                    Toast.makeText(this, "Image is larger than 500kb", Toast.LENGTH_LONG).show();
+                } else {
+                    profileField.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
+                    //Base-64
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmapForProfile.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] imageBytes = baos.toByteArray();
+                    baseImg = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+                }
+
             } else {
                 Toast.makeText(SignUpActivity.this, "You have't pick an image", Toast.LENGTH_LONG).show();
             }

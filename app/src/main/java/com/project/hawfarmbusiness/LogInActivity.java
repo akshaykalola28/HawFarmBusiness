@@ -122,15 +122,15 @@ public class LogInActivity extends AppCompatActivity {
         boolean valid = false;
         email = email_field.getText().toString().trim();
         pass = password_field.getText().toString().trim();
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
-
-        if (email.isEmpty()) {
+        if (email.isEmpty()|| !email.matches(emailPattern)) {
             email_field.setError("Enter E-mail");
             email_field.requestFocus();
-        } else if (pass.isEmpty()) {
+        } else if (pass.isEmpty()|| pass.length()<7) {
             password_field.setError("Enter Password");
             password_field.requestFocus();
-        } else {
+        } else{
             valid = true;
         }
         return valid;
@@ -215,12 +215,10 @@ public class LogInActivity extends AppCompatActivity {
                             Log.w(TAG, "getInstanceId failed", task.getException());
                             return;
                         }
-
                         // Get new Instance ID token
                         String token = task.getResult().getToken();
                         Log.d("Token", token);
                         notificationToken = task.getResult().getToken();
-
                     }
                 });
         // [END retrieve_current_token]
