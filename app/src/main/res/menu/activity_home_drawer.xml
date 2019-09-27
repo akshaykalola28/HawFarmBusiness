@@ -23,15 +23,25 @@
             android:id="@+id/nav_all_order"
             android:icon="@drawable/ic_format_list_bulleted"
             android:title="All Order" />
+
+        <item
+            android:id="@+id/nav_for_delivery"
+            android:icon="@drawable/ic_format_list_bulleted"
+            android:title="For Delivery" />
+
+        <item
+            android:id="@+id/nav_pending_order"
+            android:icon="@drawable/ic_format_list_bulleted"
+            android:title="Pending Order" />
     </group>
 
-    <item android:title="Communicate">
+    <!--<item android:title="Communicate">
         <menu>
             <item
                 android:id="@+id/nav_contact_us"
                 android:icon="@drawable/ic_chat_bubble_outline"
                 android:title="Contact Us" />
         </menu>
-    </item>
+    </item>-->
 
 </menu>

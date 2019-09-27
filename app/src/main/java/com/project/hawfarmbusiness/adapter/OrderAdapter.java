@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.project.hawfarmbusiness.R;
+import com.project.hawfarmbusiness.ServerCallMethod;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,16 +41,51 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OrderViewHolder orderViewHolder, int i) {
-        JSONObject item = items.get(i);
-
-        Log.d(TAG, "onBindViewHolder: " + item.toString());
+    public void onBindViewHolder(@NonNull final OrderViewHolder orderViewHolder, int i) {
+        final JSONObject item = items.get(i);
 
         try {
-            orderViewHolder.orderIdField.setText(item.getString("orderId"));
+            final String orderId = item.getString("orderId");
+            orderViewHolder.orderIdField.setText(orderId);
             orderViewHolder.dateField.setText(item.getString("orderDate"));
             orderViewHolder.buyerNameField.setText(item.getString("buyerName"));
             orderViewHolder.buyerAddressField.setText(item.getString("buyerAddress"));
+
+            //Show Appropriate Button
+            final String status = item.getString("status");
+            if (status.equals("pending")) {
+                orderViewHolder.acceptButton.setVisibility(View.VISIBLE);
+                orderViewHolder.rejectButton.setVisibility(View.VISIBLE);
+
+                orderViewHolder.acceptButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        boolean isUpdated = ServerCallMethod.orderStatusUpdate(context, orderId, "accepted");
+                        if (isUpdated){
+                            notifyDataSetChanged();
+                            Log.d(TAG, "onClick: Success");
+                        } else {
+                            Log.d(TAG, "onClick: Failed");
+                        }
+
+                    }
+                });
+
+                orderViewHolder.rejectButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ServerCallMethod.orderStatusUpdate(context, orderId, "rejected");
+                    }
+                });
+            } else if (status.equals("accepted")) {
+                orderViewHolder.deliverButton.setVisibility(View.VISIBLE);
+                orderViewHolder.deliverButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ServerCallMethod.orderStatusUpdate(context, orderId, "delivered");
+                    }
+                });
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -63,7 +99,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     public class OrderViewHolder extends RecyclerView.ViewHolder {
 
         TextView orderIdField, dateField, buyerNameField, buyerAddressField;
-        Button acceptButton, rejectButton;
+        Button acceptButton, rejectButton, deliverButton;
 
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -74,6 +110,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             buyerAddressField = itemView.findViewById(R.id.buyer_address_field);
             acceptButton = itemView.findViewById(R.id.accept_order);
             rejectButton = itemView.findViewById(R.id.reject_order);
+            deliverButton = itemView.findViewById(R.id.delivered_order);
         }
     }
 }

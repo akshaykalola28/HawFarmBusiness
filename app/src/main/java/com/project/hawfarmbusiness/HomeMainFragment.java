@@ -3,7 +3,6 @@ package com.project.hawfarmbusiness;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +13,21 @@ import android.view.ViewGroup;
  */
 public class HomeMainFragment extends Fragment {
 
+    View mainView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.activity_home_main, container, false);
+        mainView = inflater.inflate(R.layout.activity_home_main, container, false);
+
+        Bundle bundle = new Bundle();
+        bundle.putString("status", "pending");
+        OrderFragment orderFragment = new OrderFragment();
+        orderFragment.setArguments(bundle);
+        getFragmentManager().beginTransaction().replace(R.id.current_order_frame, orderFragment).commit();
+
+        return mainView;
     }
 
 }

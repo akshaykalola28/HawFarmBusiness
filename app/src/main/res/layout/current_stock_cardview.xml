@@ -30,16 +30,19 @@
                 android:id="@+id/veg_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/horizontal_line"
                 android:layout_alignParentEnd="true"
+                android:layout_marginBottom="3dp"
                 android:text="Date"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <View
                 android:id="@+id/horizontal_line"
                 android:layout_width="wrap_content"
-                android:layout_height="2dp"
+                android:layout_height="1dp"
                 android:layout_below="@+id/veg_name"
-                android:background="#c0c0c0" />
+                android:layout_margin="2dp"
+                android:background="@color/colorAccent" />
 
             <TextView
                 android:id="@+id/total_Stock_card"

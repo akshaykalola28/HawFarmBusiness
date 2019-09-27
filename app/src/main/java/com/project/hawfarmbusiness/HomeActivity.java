@@ -64,8 +64,7 @@ public class HomeActivity extends AppCompatActivity
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new AllOrderFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new HomeMainFragment()).commit();
     }
 
     @Override
@@ -121,7 +120,7 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new AllOrderFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new HomeMainFragment()).commit();
         }
         if (id == R.id.nav_add_stock) {
             getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new AddStockFragment()).commit();
@@ -130,7 +129,21 @@ public class HomeActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new CurrentStockFragment()).commit();
         }
         if (id == R.id.nav_all_order) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new AllOrderFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, new OrderFragment()).commit();
+        }
+        if (id == R.id.nav_pending_order) {
+            Bundle bundle = new Bundle();
+            bundle.putString("status", "pending");
+            OrderFragment orderFragment = new OrderFragment();
+            orderFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, orderFragment).commit();
+        }
+        if (id == R.id.nav_for_delivery) {
+            Bundle bundle = new Bundle();
+            bundle.putString("status", "accepted");
+            OrderFragment orderFragment = new OrderFragment();
+            orderFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.home_fragment, orderFragment).commit();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

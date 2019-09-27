@@ -3,7 +3,6 @@ package com.project.hawfarmbusiness.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,12 +37,11 @@ public class CurrentStockAdapter extends RecyclerView.Adapter<CurrentStockAdapte
     public void onBindViewHolder(@NonNull CurrentStockViewHolder currentStockViewHolder, int i) {
         JSONObject currentStock = currentStockList.get(i);
         try {
-            //JSONArray productArray = currentStock.getJSONArray("product");
-            Log.d("", String.valueOf(currentStockList.size()));
             currentStockViewHolder.vegNameField.setText(currentStock.getString("veg_name"));
             currentStockViewHolder.totalStockField.setText(currentStock.getString("total_stock"));
-            currentStockViewHolder.currentStockField.setText(currentStock.getString("total_stock"));
+            currentStockViewHolder.currentStockField.setText(currentStock.getString("availableStock"));
             currentStockViewHolder.stockId.setText(currentStock.getString("stockId"));
+            currentStockViewHolder.dateField.setText(currentStock.getString("stockDate"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -61,7 +59,7 @@ public class CurrentStockAdapter extends RecyclerView.Adapter<CurrentStockAdapte
         public CurrentStockViewHolder(@NonNull View itemView) {
             super(itemView);
             vegNameField = itemView.findViewById(R.id.veg_name);
-            //dateField = itemView.findViewById(R.id.veg_date);
+            dateField = itemView.findViewById(R.id.veg_date);
             totalStockField = itemView.findViewById(R.id.total_stock_field);
             currentStockField = itemView.findViewById(R.id.current_stock_field);
             stockId = itemView.findViewById(R.id.stock_id_field);

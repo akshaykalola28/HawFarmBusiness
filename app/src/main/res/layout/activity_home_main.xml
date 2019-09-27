@@ -1,44 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomeMainFragment">
 
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <TextView
+            android:id="@+id/new_order_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:text="New Orders"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+        <FrameLayout
+            android:id="@+id/current_order_frame"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/location_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/boxroundshape"
-                android:drawableStart="@drawable/ic_location_on_black"
-                android:focusable="false"
-                android:hint="Add Location"
-                android:paddingStart="10dp" />
-
-            <LinearLayout
-                android:id="@+id/main_slider"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/location_bar"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/viewPage"
-                    android:layout_width="match_parent"
-                    android:layout_height="80pt"
-                    android:background="@drawable/boxroundshape" />
-            </LinearLayout>
-        </RelativeLayout>
-    </ScrollView>
-</android.support.v4.widget.SwipeRefreshLayout>
+            android:layout_height="wrap_content"
+            android:layout_below="@id/new_order_header" />
+    </RelativeLayout>
+</ScrollView>
 

@@ -30,9 +30,9 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AllOrderFragment extends Fragment {
+public class OrderFragment extends Fragment {
 
-    private static final String TAG = "AllOrderFragment";
+    private static final String TAG = "OrderFragment";
 
     View mainView;
     RecyclerView allOrderRecycler;
@@ -43,7 +43,7 @@ public class AllOrderFragment extends Fragment {
     JSONObject userDataJson;
     String userEmail;
 
-    public AllOrderFragment() {
+    public OrderFragment() {
         // Required empty public constructor
     }
 
@@ -51,7 +51,7 @@ public class AllOrderFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mainView = inflater.inflate(R.layout.fragment_all_order, container, false);
+        mainView = inflater.inflate(R.layout.fragment_order, container, false);
 
         userDataJson = ((HomeActivity) getActivity()).getUser();
         try {
@@ -80,7 +80,15 @@ public class AllOrderFragment extends Fragment {
 
     private void fetchOrderList() {
         Log.d(TAG, "fetchOrderList: ");
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, ServerData.GET_ORDER_URL + userEmail, null,
+
+        String extraString = "";
+        if (getArguments() != null && !getArguments().getString("status").isEmpty()) {
+            extraString = "?status=" + getArguments().getString("status");
+        }
+        Log.d(TAG, "fetchOrderList: ExtraString: " + extraString);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
+                ServerData.GET_ORDER_URL + userEmail + extraString,
+                null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
